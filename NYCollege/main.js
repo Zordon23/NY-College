@@ -1,6 +1,6 @@
 'use strict';
 
-var locations = {
+var colleges = {
   "adirondack community college" : {
     "campus": "Adirondack Community College",
     "institution_level": "2-year",
@@ -1029,6 +1029,41 @@ function onIntent(intentRequest, session, callback) {
   var intentName = intentRequest.intent.name;
 
   // Dispatch to custom intents here.
+  if ("UniversityIntent" === intentName) {
+    handleUserResponse(intent, session, callback);
+  } else if ("TwoYearIntent" === intentName) {
+    twoYearList(intent, session, callback);
+  } else if ("FourYearIntent" === intentName) {
+    fourYearList(intent, session, callback);
+  } else if ("CommunityIntent" === intentName) {
+    communityColleges(intent, session, callback);
+  } else if ("FashionIntent" === intentName) {
+    fashionColleges(intent, session, callback);
+  } else if ("DoctoralIntent" === intentName) {
+    doctoralColleges(intent, session, callback);
+  } else if ("TechnologyIntent" === intentName) {
+    technologyColleges(intent, session, callback);
+  } else if ("AMAZON.HelpIntent" === intentName) {
+    getHelp(intent, session, callback);
+  } else if ("AMAZON.YesIntent" === intentName) {
+    if (session.attributes.previousPlace === "User Response") {
+      nextUniversity(intent, session, callback);
+    } else if (session.attributes.previousPlace === "Next University") {
+      newUniversity(intent, session, callback);
+    }
+  } else if ("AMAZON.NoIntent" === intentName) {
+    if (session.attributes.previousPlace === "Next University") {
+      searchForUniversityBy(intent, session, callback);
+    } else {
+      endSession(intent, session, callback);
+    }
+  } else if ("AMAZON.StopIntent" === intentName) {
+    endSession(intent, session, callback);
+  } else if ("AMAZON.CancelIntent" === intentName) {
+    endSession(intent, session, callback);
+  } else {
+    throw "Invalid Intent";
+  }
 }
 
 // Called when the user ends the session. Is not called when the skill returns shouldEndSession=true.
@@ -1051,4 +1086,302 @@ function getWelcomeResponse(callback) {
   };
 
   callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function handleUserResponse(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "New York State University";
+  var school = intent.slots.School.value.toLowerCase();
+  var speechOutput;
+  var repromptText;
+  var shouldEndSession = false;
+
+  if (!colleges[school]) {
+    speechOutput = "I'm sorry, I didn't quite understand what you University you wanted. Please try again, or ask about a different university.  ";
+    repromptText = "Try asking again or, about a different university.  ";
+  } else {
+    var campus = colleges[school].campus;
+    var institution_level = colleges[school].institution_level;
+    var institution_type = colleges[school].institution_type;
+    var program_1 = colleges[school].program_1;
+    var program_2 = colleges[school].program_2;
+    var program_3 = colleges[school].program_3;
+    var program_4 = colleges[school].program_4;
+    var program_5 = colleges[school].program_5;
+    var undergrad_enrollment = colleges[school].undergrad_enrollment;
+    var campus_website = colleges[school].campus_website;
+    var address = colleges[school].address;
+    var city = colleges[school].city;
+    var state = colleges[school].state;
+    var zip = colleges[school].zip;
+    speechOutput = campus + " is a " + institution_level + " university that is classified in the " + institution_type " category of schools. "
+    + "There is " + undergrad_enrollment + " undergraduate students that attended "
+    + campus + " as of 2015. With some of the most popular areas of study being "
+    + program_1 + ", " + program_2 + ", " + program_3 + ", " + program_4 + ", and "
+    + program_5 + ". The university is located at " + address + ", "
+    + city + ", " + state + ", " + zip + ". If you would like more in depth information about this university, please visit their website, located at " + campus_website + ". Would you like to hear about another university?  ";
+    repromptText = "Would you like to hear about another university? If not you can simply say, no, stop, or cancel.  ";
+  }
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "User Response"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function nextUniversity(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Do You Know What You're Looking For?";
+  var speechOutput = "Do you know which university you want to hear about?  ";
+  var repromptText = speechOutput;
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Next University"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function newUniversity(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "What university do you want to know about?  ";
+  var speechOutput = "What university do you want to know about?  ";
+  var repromptText = speechOutput;
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "New University"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function searchForUniversityBy(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "New University";
+  var speechOutput = "You can get a list of universities from the following criteria. "
+  + "Institution Level: 2-year or 4-year universities. "
+  + "Institution Type: Community Colleges, Fashion Colleges, Comprehensive Colleges, Doctoral Degree Granting Colleges, or Technology Colleges. "
+  + "To get a list of universities say, give me a list of, and one of the search criteria. ";
+  var repromptText = "To get a list of universities say, give me a list of, and one of the search criteria. ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Search For"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function twoYearList(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "2-Year universities";
+  var speechOutput = "Some notable two year universities include: "
+  + "Adirondack Community College. "
+  + "Broome Community College. "
+  + "Fulton-Montgomery Community College. "
+  + "Herkimer County Community College. "
+  + "Hudson Valley Community College. "
+  + "Onondaga Community College. "
+  + "And, Schenectady County Community College. ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Two Year"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function fourYearList(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "4-Year universities";
+  var speechOutput = "Some notable four year universities include: "
+  + "SUNY Brockport. "
+  + "SUNY New Paltz. "
+  + "SUNY Oneonta. "
+  + "SUNY Binghamton. "
+  + "SUNY Albany. "
+  + "SUNY Canton. "
+  + "SUNY Cobleskill. "
+  + "And, SUNY Delhi. ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Four Year"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function communityColleges(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Community Colleges";
+  + "Adirondack Community College. "
+  + "Broome Community College. "
+  + "Fulton-Montgomery Community College. "
+  + "Herkimer County Community College. "
+  + "Hudson Valley Community College. "
+  + "Onondaga Community College. "
+  + "And, Schenectady County Community College.  ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Community Colleges"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function fashionColleges(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Fashion Colleges";
+  var speechOutput = "The Fashion Institute of Technology is currently the only Fashion College in New York I know about.  ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Fashion Colleges"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function comprehensiveColleges(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Comprehensive Colleges";
+  var speechOutput = "Some notable comprehensive colleges include:  "
+  + "SUNY Brockport. "
+  + "SUNY New Paltz. "
+  + "SUNY Oneonta. "
+  + "SUNY Oswego. "
+  + "SUNY Plattsburgh. "
+  + "And, SUNY Potsdam.  ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Comprehensive Colleges"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function doctoralColleges(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Doctoral Colleges";
+  var speechOutput = "Some notable doctoral colleges include:  "
+  + "Cornell. "
+  + "SUNY Stony Brook. "
+  + "SUNY Binghamton. "
+  + "And, SUNY Albany.  ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Doctorial Colleges"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function technologyColleges(intent, session, callback) {
+  var sessionAttributes = {};
+  var CARD_TITLE = "Technology Colleges";
+  var speechOutput = "Some notable technology colleges include:  "
+  + "SUNY Canton. "
+  + "SUNY Cobleskill. "
+  + "SUNY Delhi. "
+  + "SUNY Farmingdale. "
+  + "SUNY Maritime. "
+  + "And, SUNY Morrisville.  ";
+  var repromptText = "Which university would you like to hear about?  ";
+  var shouldEndSession = false;
+
+  sessionAttributes = {
+    "speechOutput": speechOutput,
+    "repromptText": repromptText,
+    "previousPlace": "Technology Colleges"
+  };
+
+  callback(sessionAttributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function getHelp(intent, session, callback) {
+  if (!session.attributes) {
+    session.attributes = {};
+  }
+
+  var CARD_TITLE = "NY College Help";
+  var speechOutput = "To hear information about a New York State University say, tell me about, and the name of the university you wish to hear information on. "
+  + "Or you can choose from various search criteria to get lists of some notable universities that falls within that criteria. "
+  + "Search criteria includes: "
+  + "Institution Level: 2-year or 4-year universities. "
+  + "Institution Type: Community Colleges, Fashion Colleges, Comprehensive Colleges, Doctorial Degree Granting Colleges, or Technology Colleges. "
+  + "What would you like to do?  ";
+  var repromptText = "Say the name of the university you wish to know about or search for universities by search criteria. "
+  + "What would you like to do?  ";
+
+  var shouldEndSession = false;
+
+  callback(session.attributes, buildSpeechletResponse(CARD_TITLE, speechOutput, repromptText, shouldEndSession));
+}
+
+function endSession(intent, session, callback) {
+  var CARD_TITLE = "Goodbye, have a wonderful day!"
+  callback(session.attributes, buildSpeechletResponse(CARD_TITLE, "Goodbye, thank you for using NY College, have a wonderful day!", "", true));
+}
+
+function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+  return {
+    outputSpeech: {
+      type: "PlainText",
+      text: output
+    },
+    card: {
+      type: "Simple",
+      title: title,
+      content: output
+    },
+    reprompt: {
+      outputSpeech: {
+        type: "PlainText",
+        text: repromptText
+      }
+    },
+    shouldEndSession: shouldEndSession
+  };
+}
+
+function buildResponse(sessionAttributes, speechletResponse) {
+  return {
+    version: "1.0",
+    sessionAttributes: sessionAttributes,
+    response: speechletResponse
+  };
 }

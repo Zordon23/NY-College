@@ -1,0 +1,46 @@
+{
+  "intents": [
+    {
+      "intent": "UniversityIntent",
+      "slots": [
+        {
+          "name": "School",
+          "type": "LIST_OF_SCHOOLS"
+        }
+      ]
+    },
+    {
+      "intent": "TwoYearIntent"
+    },
+    {
+      "intent": "FourYearIntent"
+    },
+    {
+      "intent": "CommunityIntent"
+    },
+    {
+      "intent": "FashionIntent"
+    },
+    {
+      "intent": "DoctoralIntent"
+    },
+    {
+      "intent": "TechnologyIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
