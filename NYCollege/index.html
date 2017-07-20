@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Socrata Webscrape</title>
+
+	<link rel="stylesheet" href="css/main.css"> <!-- includes bootstrap -->
+
+  <!-- load angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+</head>
+<body class="container" ng-app="UniApp" ng-controller="UniCtrl">
+
+	<h1>New York State Universities</h1>
+
+	<p>Search: <input type="text" ng-model="query" class="form-control"></p>
+
+	<table class="table">
+		<tr>
+			<th><a href="" ng-click="sortBy = 'campus'">Campus Name</a></th>
+      <th><a href="" ng-click="sortBy = 'institution_level'">Institution Level</a></th>
+      <th><a href="" ng-click="sortBy = 'institution_type'">Institution Type</a></th>
+      <th><a href="" ng-click="sortBy = 'program_1'">Program 1</a></th>
+      <th><a href="" ng-click="sortBy = 'program_2'">Program 2</a></th>
+      <th><a href="" ng-click="sortBy = 'program_3'">Program 3</a></th>
+      <th><a href="" ng-click="sortBy = 'program_4'">Program 4</a></th>
+      <th><a href="" ng-click="sortBy = 'program_5'">Program 5</a></th>
+      <th><a href="" ng-click="sortBy = 'undergrad_enrollment'">Undergrad Enrollment</a></th>
+      <th><a href="" ng-click="sortBy = 'campus_website'">Campus Website</a></th>
+			<th><a href="" ng-click="sortBy = 'address'">Street Address 1</a></th>
+      <th><a href="" ng-click="sortBy = 'address_2'">Street Address 2</a></th>
+			<th><a href="" ng-click="sortBy = 'city'">City</a></th>
+      <th><a href="" ng-click="sortBy = 'county'">County</a></th>
+			<th><a href="" ng-click="sortBy = 'state'">State</a></th>
+			<th><a href="" ng-click="sortBy = 'zip'">Zip Code</a></th>
+			<th></th>
+		</tr>
+		<tr ng-repeat="uni in uni | orderBy:sortBy | filter:query">
+			<td>{{uni.campus}}</td>
+			<td>{{uni.institution_level}}</td>
+      <td>{{uni.institution_type}}</td>
+			<td>{{uni.program_1}}</td>
+			<td>{{uni.program_2}}</td>
+			<td>{{uni.program_3}}</td>
+			<td>{{uni.program_4}}</td>
+      <td>{{uni.program_5}}</td>
+      <td>{{uni.undergrad_enrollment}}</td>
+      <td>{{uni.campus_website}}</td>
+      <td>{{uni.address}}</td>
+      <td>{{uni.address_2}}</td>
+      <td>{{uni.city}}</td>
+      <td>{{uni.county}}</td>
+      <td>{{uni.state}}</td>
+      <td>{{uni.zip}}</td>
+		</tr>
+	</table>
+
+	<!-- load our script -->
+	<script src="js/scrape.js"></script>
+
+</body>
+</html>
